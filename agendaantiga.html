@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda</title>
+    <link rel="stylesheet" href="stylesage.css">
+</head>
+
+<body>
+    <nav class="modulos">
+
+        <a href="index.html">Tela inicial</a>
+        <a href="agenda.html"> Agendas </a>
+        <a href="clientes.html"> Clientes </a>
+        <a href="estoque.html"> Estoque </a>
+        <a href="dentistas.html"> Dentistas </a>
+
+    </nav>
+
+    <div class="agenda" id="agenda">
+        <h1> Horário de Entrega</h1>
+        <form id=formagenda>
+            <label for="name"> Nome do cliente</label>
+            <input type="text" name="nomecliente" id="nomecliente" required>
+
+            <label for="date"> Data de entrada</label>
+            <input type="date" name="dataentrada" id="dataentrada" required>
+
+            <label for="Hora entrada"> Hora de entrada </label>
+            <input type="time" name="hrentrada" id="hrentrada">
+
+            <label for="date"> Previsão de entrega</label>
+            <input type="date" name="dataentrega" id="dataentrega">
+
+            <label for="description"> Descrição do trabalho </label>
+            <textarea name="desc" id="desc"></textarea>
+
+            <button type="submit" class="btnagendar"> Salvar </button>
+        </form>
+    </div>
+
+    <div class="agendaresultado" id="agendaresultado">
+        <h2>Dados do agendamento</h2>
+        <p><strong>Nome: </strong><span id="resnomecliente"></span></p>
+        <p><strong>Data de entrada: </strong> <span id="resdataentrada"></span></p>
+        <p><strong>Hora de entrada: </strong> <span id="reshoraentrada"></span></p>
+        <p><strong>Previsão de entrega: </strong> <span id="resprevisaodeentrega"></span></p>
+        <p><strong>Descrição do trabalho: </strong> <span id="resdesc"></span></p>
+
+    </div>
+
+    <script>
+document.getElementById('formagenda').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const nomecliente = document.getElementById('nomecliente').value;
+    const dataentrada = document.getElementById('dataentrada').value;
+    const hrentrada = document.getElementById('hrentrada').value;
+    const dataentrega = document.getElementById('dataentrega').value;
+    const desc = document.getElementById('desc').value;
+
+
+    document.getElementById('resnomecliente').innerText = nomecliente;
+    document.getElementById('resdataentrada').innerText = dataentrada;
+    document.getElementById('reshoraentrada').innerText = hrentrada;
+    document.getElementById('resprevisaodeentrega').innerText = dataentrega;
+    document.getElementById('resdesc').innerText = desc;
+
+    
+    document.getElementById('agenda').classList.remove('active');
+    document.getElementById('agendaresultado').classList.add('active');
+});
+
+document.getElementById('agenda').classList.add('active');
+
+    </script>
+
+</body>
+
+</html>

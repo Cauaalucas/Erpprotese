@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda</title>
+</head>
+
+<body>
+    <nav>
+        <a href="index.html">Tela inicial</a>
+        <a href="agenda.html">Entregas</a>
+        <a href="clientes.html">Clientes</a>
+        <a href="estoque.html">Estoque</a>
+        <a href="dentistas.html">Dentistas</a>
+    </nav>
+
+    <table id="agenda">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th id="header-data-entrega">Data de entrega</th>
+                <th>Telefone</th>
+                <th>Dentista</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const agenda = document.getElementById('agenda').querySelector('tbody');
+            const headerDataEntrega = document.getElementById('header-data-entrega');
+
+            let clients = [];
+
+            fetch('get_clients.php')
+                .then(response => response.json())
+                .then(data => {
+                    clients = data.clients;
+                    // Ordena os clientes pela data de entrega
+                    clients.sort((a, b) => new Date(a.dtnasc) - new Date(b.dtnasc));
+                    clients.forEach(cliente => adicionarclienteagenda(cliente));
+                })
+                .catch(error => {
+                    console.error('Error fetching clients:', error);
+                });
+
+            function adicionarclienteagenda(cliente) {
+                const row = agenda.insertRow();
+                row.insertCell(0).innerText = cliente.nome;
+                row.insertCell(1).innerText = cliente.dtnasc;
+                row.insertCell(2).innerText = cliente.telefone;
+                row.insertCell(3).innerText = cliente.dentresp;
+            }
+
+            headerDataEntrega.addEventListener('click', () => {
+                // Alternar entre ascendente e descendente
+                const isAscending = headerDataEntrega.classList.toggle('asc');
+                headerDataEntrega.classList.toggle('desc', !isAscending);
+
+                // Ordena os clientes pela data de entrega
+                clients.sort((a, b) => {
+                    const dateA = new Date(a.dtnasc);
+                    const dateB = new Date(b.dtnasc);
+                    return isAscending ? dateA - dateB : dateB - dateA;
+                });
+
+                // Limpa a tabela e adiciona os clientes ordenados
+                agenda.innerHTML = '';
+                clients.forEach(cliente => adicionarclienteagenda(cliente));
+            });
+        });
+    </script>
+
+  
+</body>
+
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tela Principal</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .modulos {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modulos a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        .main-content {
+            padding: 20px;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-gap: 20px;
+        }
+
+        .grid-item {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .create-appointment-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        .create-appointment-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <div>
+    <nav class="modulos">
+
+        <a href="index.html">Tela inicial</a>
+        <a href="agendamentos.html"> Entregas </a>
+        <a href="clientes.html"> Clientes </a>
+        <a href="estoque.html"> Estoque </a>
+        <a href="dentistas.html"> Dentistas </a>
+
+    </nav>
+    <button class="create-appointment-button" onclick="window.location.href='agendamentos.html'">Criar Agendamento</button>
+</div>
+    
+        
+    </div>
+
+    <div class="main-content">
+        <h1>Informações do Cliente</h1>
+        <div class="grid-container">
+            <div class="grid-item">Cliente 1</div>
+            <div class="grid-item">Cliente 2</div>
+            <div class="grid-item">Cliente 3</div>
+        </div>
+    </div>
+</body>
+</html>

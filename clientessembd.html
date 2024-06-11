@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clientes</title>
+</head>
+
+<body>
+    <nav>
+        <a href="index.html">Tela inicial</a>
+        <a href="agenda.html"> Entregas </a>
+        <a href="clientes.html"> Clientes </a>
+        <a href="estoque.html"> Estoque </a>
+        <a href="dentistas.html"> Dentistas </a>
+    </nav>
+
+    <form id="formcliente">
+        <label for="nomecli">* Nome:</label>
+        <input type="text" id="nomecli" name="nomecli" required>
+
+        <label for="dtnasc">data de nascimento</label>
+        <input type="date" id="dtnasc" name="dtnasc">
+
+        <label for="telefonecli">Numero do telefone</label>
+        <input type="tel" id="telefonecli" name="telefonecli">
+
+        <label for="dentresp">* Dentista responsável</label>
+        <input type="text" name="dentresp" id="dentresp" required>
+
+        <button type="submit">Cadastrar</button>
+        <!-- testar trocar submit por reset, mas verificar se as informações salvam-->
+    </form>
+
+    <table id="infocliente">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Nascimento</th>
+                <th>Telefone</th>
+                <th>Dentista</th>
+                <th>Telefone do dentista</th>
+                <th>Ação</th>
+
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+
+    <div id="edicaocli" class="cli">
+        <div class="conteudo">
+            <span class="fechar">&times;</span>
+            <!--entender para que server esse span e o &times;-->
+            <form id="edicaoclienteformulario">
+                <input type="hidden" id="editaridcliente">
+
+                <label for="editarnome">* Nome</label>
+                <input type="text" id="editarnome" name="editarnome required">
+
+                <label for="editarnsc">Data de nascimento</label>
+                <input type="date" id="editarnsc" name="editarnsc">
+
+                <label for="edittelefone">Editar telefone</label>
+                <input type="tel" id="edittelefone" name="edittelefone">
+
+                <label for="editdentista">* Dentista responsável</label>
+                <input type="text" id="editdentista" name="editdentista" required>
+
+                <button type="submit">Salvar alterações</button>
+
+            </form>
+        </div>
+    </div>
+<script>
+document.addEventListener('DOMContentLoaded', ()=>{
+    const formcliente = document.getElementById('formcliente');
+    const infocliente = document.getElementById('infocliente').querySelector('tbody');
+    const edicaocli = document.getElementById('edicaocli');
+    const edicaoclienteformulario = document.getElementById('edicaoclienteformulario');
+    const editaridcliente = document.getElementById('editaridcliente');
+    const editarnome = document.getElementById('editarnome');
+    const editarnsc = document.getElementById('editarnsc');
+    const edittelefone = document.getElementById('edittelefone');
+    const editdentista = document.getElementById('editdentista');
+    const fechar = document.getElementById('.fechar');
+
+    let clientes = [];
+    let editarclientesindex = null; 
+
+    formcliente.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const nomecli = formcliente.nomecli.value;
+        const dtnasc = formcliente.dtnasc.value; 
+        const telefonecli = formcliente.telefonecli.value;
+        const dentresp = formcliente.dentresp.value;
+      
+
+        const cliente = { id: Date.now(), nomecli, dtnasc, telefonecli, dentresp};
+        clientes.push(cliente);
+
+        adicionarclienteatabela(cliente);
+        formcliente.reset();
+    });
+
+    fechar.addEventListener('click', () => {
+                edicaocli.style.display = 'none'; 
+
+    });
+
+    window.addEventListener('click', (event) => {
+        if(event.target === edicaocli){
+            edicaocli.style.display = 'none';
+        }
+    });
+
+    edicaoclienteformulario.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const id = editaridcliente.value;
+        const nome = editarnome.value;
+        const dtnasc = editarnsc.value;
+        const telefone = edittelefone;
+        const dentista = editdentista.value;
+
+        const index = clientes.findIndex(cliente => cliente.id == id);
+        clientes[index] = {id, nomecli: nome, dtnasc, telefonecli: telefone, dentresp: dentista};
+
+        updateinfoclientenatela(index, clientes[index]);
+        edicaocli.style.display = 'none';
+    });
+
+    function adicionarclienteatabela(cliente){
+        const row = infocliente.insertRow();
+        row.insertCell(0).innerText = cliente.nomecli;
+        row.insertCell(1).innerText = cliente.dtnasc;
+        row.insertCell(2).innerText = cliente.telefonclie;
+        row.insertCell(3).innerText = cliente.dentresp;
+        const acoes = row.insertCell(4);
+        const btneditar = document.createElement('button');
+        btneditar.innerText = 'Editar';
+        btneditar.addEventListener('click', () => {
+            editarclientesindex = Array.from(infocliente.rows).indexOf(row);
+            abrireditpainel(cliente);
+        });
+        acoes.appendChild(btneditar);
+    }
+
+    function updateinfoclientenatela(index, cliente){
+        const row = infocliente.rows[index];
+        row.cells[0].innerText = cliente.nomecli;
+        row.cells[1].innerText = cliente.dtnasc;
+        row.cells[2].innerText = cliente.telefonecli;
+        row.cells[3].innerText = cliente.dentresp;
+    }
+
+    function abrireditpainel(cliente){
+        editaridcliente.value = cliente.id;
+        editarnome.value = cliente.nomecli;
+        editarnsc.value = cliente.dtnasc;
+        edittelefone.value = cliente.telefonecli;
+        editdentista.value = cliente.dentresp;
+        edicaocli.style.display = 'block';
+    }
+});
+
+</script>
+</body>
+
+</html>
