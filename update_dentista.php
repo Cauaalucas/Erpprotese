@@ -1,29 +1,20 @@
 <?php
-$servername = "localhost";
-$username = "root"; 
-$password = ""; 
-$dbname = "aulamax"; 
+include 'db.php';
 
-$conn = new mysqli($servername, $username, $password, $dbname);
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $id = $_POST['id'];
+    $nome = $_POST['nome'];
+    $contato = $_POST['contato'];
+    $clinica = $_POST['clinica'];
+    
+    $sql = "UPDATE dentista SET nome ='$nome', contato='$contato', clinica='$clinica' WHERE id='$id'";
 
-if ($conn->connect_error) {
-    die("Conexão falhou: " . $conn->connect_error);
+    if($conn->query($sql) === TRUE){
+        echo "Registro atualizado com sucesso";
+    } else {
+        echo "Erro ao atualizar registro: ".$conn->error;
+    }
+
+    $conn->close();
 }
-
-$id = $_POST['id'];
-$nome = $_POST['nome'];
-$contato = $_POST['contato'];
-$clinica = $_POST['clinica'];
-
-$sql = "UPDATE dentistas SET nome='$nome', contato='$contato', clinica='$clinica' WHERE id=$id";
-
-if ($conn->query($sql) === TRUE) {
-    $response = array("status" => "success");
-    echo json_encode($response);
-} else {
-    $response = array("status" => "error", "message" => "Erro ao atualizar dentista: " . $conn->error);
-    echo json_encode($response);
-}
-
-$conn->close();
 ?>
