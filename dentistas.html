@@ -10,8 +10,8 @@
 <body>
     <nav>
         <a href="index.html">Tela inicial</a>
-        <a href="agenda.html"> Agenda</a>
-        <a href="clientes.html"> Clientes</a>
+        <a href="agenda.html">Agenda</a>
+        <a href="clientes.html">Clientes</a>
         <a href="estoque.html">Estoque</a>
         <a href="dentistas.html">Dentistas</a>
     </nav>
@@ -82,8 +82,8 @@
                 .then(response => response.json())
                 .then(data => {
                     dentistas = data.dentista;
-                    dentistas.forEach(dentistas => adicionarDentistaNaTabela(dentistas));
-                }) 
+                    dentistas.forEach(dentista => adicionarDentistaNaTabela(dentista));
+                });
 
             formDentista.addEventListener('submit', (event) => {
                 event.preventDefault();
@@ -110,7 +110,7 @@
                             adicionarDentistaNaTabela(dentista);
                             formDentista.reset();
                         }
-                    }); 
+                    });
             });
 
             fechar.addEventListener('click', () => {
@@ -166,14 +166,14 @@
                 });
                 acoes.appendChild(btnEditar);
 
-                const BtnExcluir = document.createElement('Button');
-                BtnExcluir.innerText = 'Excluir';
-                BtnExcluir.addEventListener('click', () =>{
-                    if(confirm('Tem certeza que deseja exluir esse dentista ?')){
-                        exluirdentista(dentista.id, row);
+                const btnExcluir = document.createElement('button');
+                btnExcluir.innerText = 'Excluir';
+                btnExcluir.addEventListener('click', () => {
+                    if (confirm('Tem certeza que deseja excluir esse dentista?')) {
+                        excluirDentista(dentista.id, row);
                     }
                 });
-                acoes.appendChild(BtnExcluir); 
+                acoes.appendChild(btnExcluir);
             }
 
             function updateInfoDentistaNaTela(index, dentista) {
@@ -191,31 +191,30 @@
                 edicaoDentista.style.display = 'block';
             }
 
-            function exluirdentista(id, row){
-                const FormData = new FormData();
-                FormData.append('id', id);
+            function excluirDentista(id, row) {
+                const formData = new FormData();
+                formData.append('id', id);
 
                 fetch('delete_dentista.php', {
                     method: 'POST',
-                    body: FormData
+                    body: formData
                 })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success){
-                        const index = dentistas.findIndex(dentistas => dentistas.id ==id);
-                        if(index !== -1){
-                            dentistas.splice(index, 1);
-                            infoDentista.removeChild(row);
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            const index = dentistas.findIndex(dentista => dentista.id == id);
+                            if (index !== -1) {
+                                dentistas.splice(index, 1);
+                                infoDentista.removeChild(row);
+                            }
+                        } else {
+                            console.error("Erro ao excluir dentista", data.error);
                         }
-                    } else {
-                        console.error("Erro ao excluir cliente", data.error);
-                    }
-                })
-                .catch(error => {
-                    console.error("Ero na requisição: ", error);
-                });
-
-            } 
+                    })
+                    .catch(error => {
+                        console.error("Erro na requisição: ", error);
+                    });
+            }
         });
     </script>
 </body>
