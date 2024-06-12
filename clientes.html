@@ -36,7 +36,7 @@
         <thead>
             <tr>
                 <th>Nome</th>
-                <th>Nascimento</th>
+                <th>Data de entrega</th>
                 <th>Telefone</th>
                 <th>Dentista</th>
                 <th>Ação</th>
@@ -95,7 +95,7 @@
             formcliente.addEventListener('submit', (event) => {
                 event.preventDefault();
                 const nomecli = formcliente.nomecli.value;
-                const dtnasc = formcliente.dtnasc.value; 
+                const dtnasc = formcliente.dtnasc.value;
                 const telefonecli = formcliente.telefonecli.value;
                 const dentresp = formcliente.dentresp.value;
 
@@ -105,22 +105,22 @@
                 formData.append('telefone', telefonecli);
                 formData.append('dentresp', dentresp);
 
-               
+
                 fetch('add_client.php', {
                     method: 'POST',
                     body: formData
                 })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.error) {
-                        console.error(data.error);
-                    } else {
-                        const cliente = { id: data.id, nome: nomecli, dtnasc, telefone: telefonecli, dentresp };
-                        clientes.push(cliente);
-                        adicionarclienteatabela(cliente);
-                        formcliente.reset();
-                    }
-                });
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            console.error(data.error);
+                        } else {
+                            const cliente = { id: data.id, nome: nomecli, dtnasc, telefone: telefonecli, dentresp };
+                            clientes.push(cliente);
+                            adicionarclienteatabela(cliente);
+                            formcliente.reset();
+                        }
+                    });
             });
 
             fechar.addEventListener('click', () => {
@@ -148,21 +148,21 @@
                 formData.append('telefone', telefone);
                 formData.append('dentresp', dentresp);
 
-                
+
                 fetch('update_client.php', {
                     method: 'POST',
                     body: formData
                 })
-                .then(response => {
-                    if (response.ok) {
-                        const index = clientes.findIndex(cliente => cliente.id == id);
-                        clientes[index] = { id, nome, dtnasc, telefone, dentresp };
-                        updateinfoclientenatela(index, clientes[index]);
-                        edicaocli.style.display = 'none';
-                    } else {
-                        console.error("Erro ao atualizar cliente");
-                    }
-                });
+                    .then(response => {
+                        if (response.ok) {
+                            const index = clientes.findIndex(cliente => cliente.id == id);
+                            clientes[index] = { id, nome, dtnasc, telefone, dentresp };
+                            updateinfoclientenatela(index, clientes[index]);
+                            edicaocli.style.display = 'none';
+                        } else {
+                            console.error("Erro ao atualizar cliente");
+                        }
+                    });
             });
 
             function adicionarclienteatabela(cliente) {
@@ -208,31 +208,31 @@
             }
 
             function excluircliente(id, row) {
-    const formData = new FormData();
-    formData.append('id', id);
+                const formData = new FormData();
+                formData.append('id', id);
 
-    fetch('delete_client.php', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            const index = clientes.findIndex(cliente => cliente.id == id);
-            if (index !== -1) {
-                clientes.splice(index, 1);
-                infocliente.removeChild(row);
-            }
-        } else {
-            console.error("Erro ao excluir cliente: ", data.error);
-        }
-    })
-    .catch(error => {
-        console.error("Erro na requisição: ", error);
-    });
+                fetch('delete_client.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            const index = clientes.findIndex(cliente => cliente.id == id);
+                            if (index !== -1) {
+                                clientes.splice(index, 1);
+                                infocliente.removeChild(row);
+                            }
+                        } else {
+                            console.error("Erro ao excluir cliente: ", data.error);
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Erro na requisição: ", error);
+                    });
             }
         });
     </script>
 </body>
- 
+
 </html>
