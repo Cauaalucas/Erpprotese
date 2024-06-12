@@ -1,30 +1,27 @@
 <?php
-$servername = "localhost";
-$username = "root"; 
-$password = ""; 
-$dbname = "aulamax"; 
+include 'db.php';
 
-$conn = new mysqli($servername, $username, $password, $dbname);
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $nome = $_POST['nome'];
+    $contato = $_POST['contato'];
+    $clinica = $_POST['clinica'];
 
-if ($conn->connect_error) {
-    die("Conexão falhou: " . $conn->connect_error);
+    $stmt = $conn->prepare("INSERT INTO dentista (nome, contato, clinica) VALUES (?, ?, ?)");
+    if ($stmt === false) {
+        echo json_encode(['error' => 'Erro ao preparar a consulta SQL: ' . $conn->error]);
+        exit;
+    }
+
+    $stmt->bind_param("sss", $nome, $contato, $clinica);
+
+    if ($stmt->execute()) {
+        $last_id = $conn->insert_id;
+        echo json_encode(['id' => $last_id]);
+    } else {
+        echo json_encode(['error' => 'Erro ao executar a consulta SQL: ' . $stmt->error]);
+    }
+
+    $stmt->close();
+    
 }
-
-$nome = $_POST['nome'];
-$contato = $_POST['contato'];
-$clinica = $_POST['clinica'];
-
-$sql = "INSERT INTO dentistas (nome, contato, clinica)
-VALUES ('$nome', '$contato', '$clinica')";
-
-if ($conn->query($sql) === TRUE) {
-    $last_id = $conn->insert_id;
-    $response = array("status" => "success", "id" => $last_id);
-    echo json_encode($response);
-} else {
-    $response = array("status" => "error", "message" => "Erro ao cadastrar dentista: " . $conn->error);
-    echo json_encode($response);
-}
-
-$conn->close();
 ?>
