@@ -78,12 +78,12 @@
             let dentistas = [];
             let editarDentistaIndex = null;
 
-            /* fetch('get_dentista.php')
+            fetch('get_dentista.php')
                 .then(response => response.json())
                 .then(data => {
                     dentistas = data.dentista;
                     dentistas.forEach(dentistas => adicionarDentistaNaTabela(dentistas));
-                }) */
+                }) 
 
             formDentista.addEventListener('submit', (event) => {
                 event.preventDefault();
@@ -96,7 +96,7 @@
                 formData.append('contato', contatoDentista);
                 formData.append('clinica', clinicaDentista);
 
-               /* fetch('add_dentista.php', {
+                fetch('add_dentista.php', {
                     method: 'POST',
                     body: formData
                 })
@@ -110,7 +110,7 @@
                             adicionarDentistaNaTabela(dentista);
                             formDentista.reset();
                         }
-                    }); */
+                    }); 
             });
 
             fechar.addEventListener('click', () => {
@@ -155,8 +155,8 @@
             function adicionarDentistaNaTabela(dentista) {
                 const row = infoDentista.insertRow();
                 row.insertCell(0).innerText = dentista.nome;
-                row.insertCell(1).innerText = dentista.contato || '-';
-                row.insertCell(2).innerText = dentista.clinica || '-';
+                row.insertCell(1).innerText = dentista.contato;
+                row.insertCell(2).innerText = dentista.clinica;
                 const acoes = row.insertCell(3);
                 const btnEditar = document.createElement('button');
                 btnEditar.innerText = 'Editar';
@@ -179,15 +179,15 @@
             function updateInfoDentistaNaTela(index, dentista) {
                 const row = infoDentista.rows[index];
                 row.cells[0].innerText = dentista.nome;
-                row.cells[1].innerText = dentista.contato || '-';
-                row.cells[2].innerText = dentista.clinica || '-';
+                row.cells[1].innerText = dentista.contato;
+                row.cells[2].innerText = dentista.clinica;
             }
 
             function abrirEdicaoDentista(dentista) {
                 editarIdDentista.value = dentista.id;
                 editarNomeDentista.value = dentista.nome;
-                editarContatoDentista.value = dentista.contato || '';
-                editarClinicaDentista.value = dentista.clinica || '';
+                editarContatoDentista.value = dentista.contato;
+                editarClinicaDentista.value = dentista.clinica;
                 edicaoDentista.style.display = 'block';
             }
 
@@ -215,7 +215,7 @@
                     console.error("Ero na requisição: ", error);
                 });
 
-            }
+            } 
         });
     </script>
 </body>
