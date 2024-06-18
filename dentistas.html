@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Dentistas</title>
+</head>
+
+<body>
+    <nav>
+        <a href="index.html">Tela inicial</a>
+        <a href="agenda.html">Agenda</a>
+        <a href="clientes.html">Clientes</a>
+        <a href="estoque.html">Estoque</a>
+        <a href="dentistas.html">Dentistas</a>
+    </nav>
+
+    <form id="formDentista">
+        <label for="nomeDentista">* Nome do Dentista:</label>
+        <input type="text" id="nomeDentista" name="nomeDentista" required>
+
+        <label for="contatoDentista">* Número de Contato:</label>
+        <input type="tel" id="contatoDentista" name="contatoDentista" required>
+
+        <label for="clinicaDentista">* Clínica:</label>
+        <input type="text" id="clinicaDentista" name="clinicaDentista" required>
+
+        <button type="submit">Cadastrar</button>
+    </form>
+
+    <table id="infoDentista">
+        <thead>
+            <tr>
+                <th>Nome do Dentista</th>
+                <th>Número de Contato</th>
+                <th>Clínica</th>
+                <th>Ação</th>
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+
+    <div id="edicaoDentista" class="cli">
+        <div class="conteudo">
+            <span class="fechar">&times;</span>
+            <form id="edicaoDentistaFormulario">
+                <input type="hidden" id="editarIdDentista">
+
+                <label for="editarNomeDentista">* Nome do Dentista</label>
+                <input type="text" id="editarNomeDentista" name="editarNomeDentista" required>
+
+                <label for="editarContatoDentista">* Número de Contato</label>
+                <input type="tel" id="editarContatoDentista" name="editarContatoDentista" required>
+
+                <label for="editarClinicaDentista">* Clínica</label>
+                <input type="text" id="editarClinicaDentista" name="editarClinicaDentista" required>
+
+                <button type="submit">Salvar alterações</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const formDentista = document.getElementById('formDentista');
+            const infoDentista = document.getElementById('infoDentista').querySelector('tbody');
+            const edicaoDentista = document.getElementById('edicaoDentista');
+            const edicaoDentistaFormulario = document.getElementById('edicaoDentistaFormulario');
+            const editarIdDentista = document.getElementById('editarIdDentista');
+            const editarNomeDentista = document.getElementById('editarNomeDentista');
+            const editarContatoDentista = document.getElementById('editarContatoDentista');
+            const editarClinicaDentista = document.getElementById('editarClinicaDentista');
+            const fechar = document.querySelector('.fechar');
+
+            let dentistas = [];
+            let editarDentistaIndex = null;
+
+            fetch('get_dentista.php')
+                .then(response => response.json())
+                .then(data => {
+                    dentistas = data.dentista;
+                    dentistas.forEach(dentista => adicionarDentistaNaTabela(dentista));
+                });
+
+            formDentista.addEventListener('submit', (event) => {
+                event.preventDefault();
+                const nomeDentista = formDentista.nomeDentista.value;
+                const contatoDentista = formDentista.contatoDentista.value;
+                const clinicaDentista = formDentista.clinicaDentista.value;
+
+                const formData = new FormData();
+                formData.append('nome', nomeDentista);
+                formData.append('contato', contatoDentista);
+                formData.append('clinica', clinicaDentista);
+
+                fetch('add_dentista.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            console.error(data.error);
+                        } else {
+                            const dentista = { id: data.id, nome: nomeDentista, contato: contatoDentista, clinica: clinicaDentista };
+                            dentistas.push(dentista);
+                            adicionarDentistaNaTabela(dentista);
+                            formDentista.reset();
+                        }
+                    });
+            });
+
+            fechar.addEventListener('click', () => {
+                edicaoDentista.style.display = 'none';
+            });
+
+            window.addEventListener('click', (event) => {
+                if (event.target === edicaoDentista) {
+                    edicaoDentista.style.display = 'none';
+                }
+            });
+
+            edicaoDentistaFormulario.addEventListener('submit', (event) => {
+                event.preventDefault();
+                const id = editarIdDentista.value;
+                const nome = editarNomeDentista.value;
+                const contato = editarContatoDentista.value;
+                const clinica = editarClinicaDentista.value;
+
+                const formData = new FormData();
+                formData.append('id', id);
+                formData.append('nome', nome);
+                formData.append('contato', contato);
+                formData.append('clinica', clinica);
+
+                fetch('update_dentista.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            const index = dentistas.findIndex(dentista => dentista.id == id);
+                            dentistas[index] = { id, nome, contato, clinica };
+                            updateInfoDentistaNaTela(index, dentistas[index]);
+                            edicaoDentista.style.display = 'none';
+                        } else {
+                            console.error("Erro ao atualizar dentista");
+                        }
+                    });
+            });
+
+            function adicionarDentistaNaTabela(dentista) {
+                const row = infoDentista.insertRow();
+                row.insertCell(0).innerText = dentista.nome;
+                row.insertCell(1).innerText = dentista.contato;
+                row.insertCell(2).innerText = dentista.clinica;
+                const acoes = row.insertCell(3);
+                const btnEditar = document.createElement('button');
+                btnEditar.innerText = 'Editar';
+                btnEditar.addEventListener('click', () => {
+                    editarDentistaIndex = Array.from(infoDentista.rows).indexOf(row);
+                    abrirEdicaoDentista(dentista);
+                });
+                acoes.appendChild(btnEditar);
+
+                const btnExcluir = document.createElement('button');
+                btnExcluir.innerText = 'Excluir';
+                btnExcluir.addEventListener('click', () => {
+                    if (confirm('Tem certeza que deseja excluir esse dentista?')) {
+                        excluirDentista(dentista.id, row);
+                    }
+                });
+                acoes.appendChild(btnExcluir);
+            }
+
+            function updateInfoDentistaNaTela(index, dentista) {
+                const row = infoDentista.rows[index];
+                row.cells[0].innerText = dentista.nome;
+                row.cells[1].innerText = dentista.contato;
+                row.cells[2].innerText = dentista.clinica;
+            }
+
+            function abrirEdicaoDentista(dentista) {
+                editarIdDentista.value = dentista.id;
+                editarNomeDentista.value = dentista.nome;
+                editarContatoDentista.value = dentista.contato;
+                editarClinicaDentista.value = dentista.clinica;
+                edicaoDentista.style.display = 'block';
+            }
+
+            function excluirDentista(id, row) {
+                const formData = new FormData();
+                formData.append('id', id);
+
+                fetch('delete_dentista.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            const index = dentistas.findIndex(dentista => dentista.id == id);
+                            if (index !== -1) {
+                                dentistas.splice(index, 1);
+                                infoDentista.removeChild(row);
+                            }
+                        } else {
+                            console.error("Erro ao excluir dentista", data.error);
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Erro na requisição: ", error);
+                    });
+            }
+        });
+    </script>
+</body>
+
+</html>
