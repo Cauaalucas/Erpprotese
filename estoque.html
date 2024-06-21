@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Estoque</title>
+
 </head>
 <body>
     <nav> 
@@ -16,5 +17,109 @@
 
     </nav>
 
+
+    <div class="contem">
+
+        <h1 id="tituloest">Estoque</h1>
+        
+        <form id="formestoque">
+            <label for="descitem">*Item</label>
+            <input type="text" id="descitem" name="descitem" required>
+            <button type="button" onclick="adicionarItem()">Adicionar Item</button>
+        </form>
+
+        <table id="tabelaestoque">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Quantidade</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            carregarEstoque();
+        });
+
+        function carregarEstoque() {
+            fetch('db_estoque.php')
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.querySelector('#tabelaestoque tbody');
+                    tableBody.innerHTML = '';
+                    data.forEach(item => {
+                        const newRow = tableBody.insertRow();
+
+                        const cell1 = newRow.insertCell(0);
+                        const cell2 = newRow.insertCell(1);
+                        const cell3 = newRow.insertCell(2);
+
+                        cell1.innerText = item.item;
+                        cell2.innerText = item.quantidade;
+                        cell2.id = `quantidade-${item.item}`;
+
+                        cell3.innerHTML = `
+                            <button onclick="alterarQuantidade('${item.item}', 1)">+</button>
+                            <button onclick="alterarQuantidade('${item.item}', -1)">-</button>
+                            <button onclick="excluirItem('${item.item}')">Excluir</button>
+                        `;
+                    });
+                });
+        }
+
+        function adicionarItem() {
+            const descitem = document.getElementById('descitem').value;
+            if (descitem.trim() !== '') {
+                const formData = new FormData();
+                formData.append('action', 'adicionar');
+                formData.append('item', descitem);
+
+                fetch('db_estoque.php', {
+                    method: 'POST',
+                    body: formData
+                }).then(() => {
+                    carregarEstoque();
+                    document.getElementById('descitem').value = '';
+                });
+            }
+        }
+
+        function alterarQuantidade(item, valor) {
+            const quantidadeCell = document.getElementById(`quantidade-${item}`);
+            let quantidade = parseInt(quantidadeCell.innerText);
+            quantidade = Math.max(0, quantidade + valor);
+
+            const formData = new FormData();
+            formData.append('action', 'alterar');
+            formData.append('item', item);
+            formData.append('quantidade', quantidade);
+
+            fetch('db_estoque.php', {
+                method: 'POST',
+                body: formData
+            }).then(() => {
+                quantidadeCell.innerText = quantidade;
+            });
+        }
+
+        function excluirItem(item) {
+            const formData = new FormData();
+            formData.append('action', 'excluir');
+            formData.append('item', item);
+
+            fetch('db_estoque.php', {
+                method: 'POST',
+                body: formData
+            }).then(() => {
+                carregarEstoque();
+            });
+        }
+    </script>
 </body>
 </html>
