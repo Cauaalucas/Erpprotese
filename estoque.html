@@ -109,7 +109,8 @@
         }
 
         function excluirItem(item) {
-            const formData = new FormData();
+            if(confirm('Tem certeza que deseja excluir esse item ?')){
+            const formData = new FormData();          
             formData.append('action', 'excluir');
             formData.append('item', item);
 
@@ -120,6 +121,7 @@
                 carregarEstoque();
             });
         }
+    }
     </script>
 </body>
 </html>
