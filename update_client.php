@@ -7,8 +7,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $dtnasc = $_POST['dtnasc'];
     $telefone = $_POST['telefone'];
     $dentresp = $_POST['dentresp'];
+    $observacao = $_POST['observacao'];
 
-    $sql = "UPDATE clients SET nome='$nome', dtnasc='$dtnasc', telefone='$telefone', dentresp='$dentresp' WHERE id='$id'";
+    $sql = "UPDATE clients SET nome='$nome', dtnasc='$dtnasc', telefone='$telefone', dentresp='$dentresp', observacao='$observacao' WHERE id='$id'";
 
     if ($conn->query($sql) === TRUE) {
         echo "Registro atualizado com sucesso";

@@ -6,8 +6,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $dtnasc = $_POST['dtnasc'];
     $telefone = $_POST['telefone'];
     $dentresp = $_POST['dentresp'];
+    $observacao = $_POST['observacao'];
 
-    $sql = "INSERT INTO clients (nome, dtnasc, telefone, dentresp) VALUES ('$nome', '$dtnasc', '$telefone', '$dentresp')";
+    $sql = "INSERT INTO clients (nome, dtnasc, telefone, dentresp, observacao ) VALUES ('$nome', '$dtnasc', '$telefone', '$dentresp', '$observacao')";
 
     if ($conn->query($sql) === TRUE) {
         $last_id = $conn->insert_id;

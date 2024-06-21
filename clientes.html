@@ -5,7 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clientes</title>
+    
 </head>
+
 
 <body>
     <nav>
@@ -29,6 +31,9 @@
         <label for="dentresp">* Dentista responsável</label>
         <input type="text" id="dentresp" name="dentresp" required>
 
+        <label for="observacao">Observação</label>
+        <textarea id="observacao" name="observacao"></textarea>
+
         <button type="submit">Cadastrar</button>
     </form>
 
@@ -39,6 +44,7 @@
                 <th>Data de entrega</th>
                 <th>Telefone</th>
                 <th>Dentista</th>
+                <th>Observação</th>
                 <th>Ação</th>
             </tr>
         </thead>
@@ -64,6 +70,9 @@
                 <label for="editdentista">* Dentista responsável</label>
                 <input type="text" id="editdentista" name="editdentista" required>
 
+                <label for="editarobservacao">Observação</label>
+                <textarea id="editarobservacao" name="editarobservacao"></textarea>
+
                 <button type="submit">Salvar alterações</button>
             </form>
         </div>
@@ -80,6 +89,7 @@
             const editarnsc = document.getElementById('editarnsc');
             const edittelefone = document.getElementById('edittelefone');
             const editdentista = document.getElementById('editdentista');
+            const editarobservacao = document.getElementById('editarobservacao');
             const fechar = document.querySelector('.fechar');
 
             let clientes = [];
@@ -98,13 +108,14 @@
                 const dtnasc = formcliente.dtnasc.value;
                 const telefonecli = formcliente.telefonecli.value;
                 const dentresp = formcliente.dentresp.value;
+                const observacao = formcliente.observacao.value;
 
                 const formData = new FormData();
                 formData.append('nome', nomecli);
                 formData.append('dtnasc', dtnasc);
                 formData.append('telefone', telefonecli);
                 formData.append('dentresp', dentresp);
-
+                formData.append('observacao', observacao);
 
                 fetch('add_client.php', {
                     method: 'POST',
@@ -115,7 +126,7 @@
                         if (data.error) {
                             console.error(data.error);
                         } else {
-                            const cliente = { id: data.id, nome: nomecli, dtnasc, telefone: telefonecli, dentresp };
+                            const cliente = { id: data.id, nome: nomecli, dtnasc, telefone: telefonecli, dentresp, observacao };
                             clientes.push(cliente);
                             adicionarclienteatabela(cliente);
                             formcliente.reset();
@@ -140,6 +151,7 @@
                 const dtnasc = editarnsc.value;
                 const telefone = edittelefone.value;
                 const dentresp = editdentista.value;
+                const observacao = editarobservacao.value;
 
                 const formData = new FormData();
                 formData.append('id', id);
@@ -147,7 +159,7 @@
                 formData.append('dtnasc', dtnasc);
                 formData.append('telefone', telefone);
                 formData.append('dentresp', dentresp);
-
+                formData.append('observacao', observacao);
 
                 fetch('update_client.php', {
                     method: 'POST',
@@ -156,7 +168,7 @@
                     .then(response => {
                         if (response.ok) {
                             const index = clientes.findIndex(cliente => cliente.id == id);
-                            clientes[index] = { id, nome, dtnasc, telefone, dentresp };
+                            clientes[index] = { id, nome, dtnasc, telefone, dentresp, observacao };
                             updateinfoclientenatela(index, clientes[index]);
                             edicaocli.style.display = 'none';
                         } else {
@@ -171,7 +183,8 @@
                 row.insertCell(1).innerText = cliente.dtnasc;
                 row.insertCell(2).innerText = cliente.telefone;
                 row.insertCell(3).innerText = cliente.dentresp;
-                const acoes = row.insertCell(4);
+                row.insertCell(4).innerText = cliente.observacao;
+                const acoes = row.insertCell(5);
                 const btneditar = document.createElement('button');
                 btneditar.innerText = 'Editar';
                 btneditar.addEventListener('click', () => {
@@ -196,6 +209,7 @@
                 row.cells[1].innerText = cliente.dtnasc;
                 row.cells[2].innerText = cliente.telefone;
                 row.cells[3].innerText = cliente.dentresp;
+                row.cells[4].innerText = cliente.observacao;
             }
 
             function abrireditpainel(cliente) {
@@ -204,6 +218,7 @@
                 editarnsc.value = cliente.dtnasc;
                 edittelefone.value = cliente.telefone;
                 editdentista.value = cliente.dentresp;
+                editarobservacao.value = cliente.observacao;
                 edicaocli.style.display = 'block';
             }
 

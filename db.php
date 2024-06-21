@@ -16,7 +16,8 @@ $sql_clients = "CREATE TABLE IF NOT EXISTS clients (
     nome VARCHAR(50) NOT NULL,
     dtnasc DATE,
     telefone VARCHAR(15),
-    dentresp VARCHAR(50) NOT NULL
+    dentresp VARCHAR(50) NOT NULL,
+    observacao varchar(150)
 )";
 
 if ($conn->query($sql_clients) === FALSE) {
