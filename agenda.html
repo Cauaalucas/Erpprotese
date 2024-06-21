@@ -5,6 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agenda</title>
+    <style>
+        /* Estilo para a coluna de observação */
+        .observacao-cell {
+            max-width: 300px;
+            overflow: auto;
+            white-space: pre-wrap;
+        }
+    </style>
 </head>
 
 <body>
@@ -23,6 +31,7 @@
                 <th id="header-data-entrega">Data de entrega</th>
                 <th>Telefone</th>
                 <th>Dentista</th>
+                <th>Observação</th>
             </tr>
         </thead>
         <tbody>
@@ -42,18 +51,21 @@
                     clients = data.clients;
                     // Ordena os clientes pela data de entrega
                     clients.sort((a, b) => new Date(a.dtnasc) - new Date(b.dtnasc));
-                    clients.forEach(cliente => adicionarclienteagenda(cliente));
+                    clients.forEach(cliente => adicionarClienteNaAgenda(cliente));
                 })
                 .catch(error => {
-                    console.error('Error fetching clients:', error);
+                    console.error('Erro ao buscar clientes:', error);
                 });
 
-            function adicionarclienteagenda(cliente) {
+            function adicionarClienteNaAgenda(cliente) {
                 const row = agenda.insertRow();
                 row.insertCell(0).innerText = cliente.nome;
                 row.insertCell(1).innerText = cliente.dtnasc;
                 row.insertCell(2).innerText = cliente.telefone;
                 row.insertCell(3).innerText = cliente.dentresp;
+                const observacaoCell = row.insertCell(4);
+                observacaoCell.classList.add('observacao-cell');
+                observacaoCell.innerText = cliente.observacao || '-';
             }
 
             headerDataEntrega.addEventListener('click', () => {
@@ -70,12 +82,10 @@
 
                 // Limpa a tabela e adiciona os clientes ordenados
                 agenda.innerHTML = '';
-                clients.forEach(cliente => adicionarclienteagenda(cliente));
+                clients.forEach(cliente => adicionarClienteNaAgenda(cliente));
             });
         });
     </script>
-
-  
 </body>
 
 </html>
