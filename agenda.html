@@ -5,18 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agenda</title>
-    <style>
-        /* Estilo para a coluna de observação */
-        .observacao-cell {
-            max-width: 300px;
-            overflow: auto;
-            white-space: pre-wrap;
-        }
-    </style>
+    <link rel="stylesheet" href="styleage.css">
 </head>
 
 <body>
-    <nav>
+    <nav id="modulos">
         <a href="index.html">Tela inicial</a>
         <a href="agenda.html">Entregas</a>
         <a href="clientes.html">Clientes</a>
@@ -26,12 +19,14 @@
 
     <table id="agenda">
         <thead>
-            <tr>
+            <!-- esse id é apenas para deixar esse infos em branco-->
+            <tr id="branco">
                 <th>Nome</th>
-                <th id="header-data-entrega">Data de entrega</th>
+                <th id="data-entrega">Data de entrega</th>
                 <th>Telefone</th>
                 <th>Dentista</th>
                 <th>Observação</th>
+                <!--Até aqui-->
             </tr>
         </thead>
         <tbody>
@@ -41,7 +36,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const agenda = document.getElementById('agenda').querySelector('tbody');
-            const headerDataEntrega = document.getElementById('header-data-entrega');
+            const headerDataEntrega = document.getElementById('data-entrega');
 
             let clients = [];
 
@@ -49,7 +44,7 @@
                 .then(response => response.json())
                 .then(data => {
                     clients = data.clients;
-                    // Ordena os clientes pela data de entrega
+                    
                     clients.sort((a, b) => new Date(a.dtnasc) - new Date(b.dtnasc));
                     clients.forEach(cliente => adicionarClienteNaAgenda(cliente));
                 })
@@ -69,18 +64,18 @@
             }
 
             headerDataEntrega.addEventListener('click', () => {
-                // Alternar entre ascendente e descendente
+               
                 const isAscending = headerDataEntrega.classList.toggle('asc');
                 headerDataEntrega.classList.toggle('desc', !isAscending);
 
-                // Ordena os clientes pela data de entrega
+                
                 clients.sort((a, b) => {
                     const dateA = new Date(a.dtnasc);
                     const dateB = new Date(b.dtnasc);
                     return isAscending ? dateA - dateB : dateB - dateA;
                 });
 
-                // Limpa a tabela e adiciona os clientes ordenados
+                
                 agenda.innerHTML = '';
                 clients.forEach(cliente => adicionarClienteNaAgenda(cliente));
             });
