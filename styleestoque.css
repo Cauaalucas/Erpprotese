@@ -1,0 +1,144 @@
+*{
+    margin: 0;
+    font-weight: normal;
+    box-sizing: border-box;
+}
+
+body {
+    margin: auto;
+    display: list-item;
+    padding-left: 20px;
+    padding-right: 30px;
+    padding-top: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+    box-sizing: border-box;
+    
+}
+
+nav#modulos {
+    /*Cor principal 191970 */
+
+    background-color: #191970;
+    padding: 30px;
+    text-align: center;
+    border: none;
+    border-radius: 10px;
+}
+
+nav#modulos a {
+    color: rgb(255, 255, 255);
+    margin: 20px;
+    margin-right: 15px;
+    padding: 10px;
+    transition: background-color 0.8s ease ; 
+    text-decoration: none;   
+    
+}
+
+nav#modulo a:last-child {
+    margin-right: 0;
+}
+
+nav#modulos a:hover {
+    /*cor secundaria 4169E1 */    
+    background-color: #4169E1;
+}
+
+
+.contem {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f0f0f0;
+    border: 1px solid #191970;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#tituloest {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+
+#formestoque {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+#formestoque label {
+    width: 100px;
+}
+
+#formestoque input[type="text"] {
+    flex: 1;
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #4169E1;
+    border-radius: 4px;
+}
+
+#formestoque button {
+    padding: 8px 16px;
+    background-color: #4169E1;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.8s ease;
+}
+
+#formestoque button:hover {
+    background-color: #4169E1;
+}
+
+#tabelaestoque {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+#tabelaestoque th,
+#tabelaestoque td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ccc;
+}
+
+#tabelaestoque th {
+    background-color: #4169E1;
+    color: #fff;
+}
+
+#tabelaestoque tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+#tabelaestoque tbody tr:hover {
+    background-color: #4169E1;
+}
+
+#tabelaestoque button {
+    padding: 6px 12px;
+    margin-right: 5px;
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#tabelaestoque button:hover {
+    background-color: #218838;
+}
+
+#tabelaestoque button:last-child {
+    background-color: #dc3545;
+}
+
+#tabelaestoque button:last-child:hover {
+    background-color: #c82333;
+}

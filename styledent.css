@@ -1,0 +1,151 @@
+*{
+    margin: 0;
+    font-weight: normal;
+    box-sizing: border-box;
+}
+
+body {
+    margin: auto;
+    display: list-item;
+    padding-left: 20px;
+    padding-right: 30px;
+    padding-top: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+    box-sizing: border-box;
+    
+}
+
+nav#modulos {
+    /*Cor principal 191970 */
+
+    background-color: #191970;
+    padding: 30px;
+    text-align: center;
+    border: none;
+    border-radius: 10px;
+}
+
+nav#modulos a {
+    color: rgb(255, 255, 255);
+    margin: 20px;
+    margin-right: 15px;
+    padding: 10px;
+    transition: background-color 0.8s ease ; 
+    text-decoration: none;   
+    
+}
+
+nav#modulo a:last-child {
+    margin-right: 0;
+}
+
+nav#modulos a:hover {
+    /*cor secundaria 4169E1 */    
+    background-color: #4169E1;
+}
+
+
+form {
+    margin-bottom: 20px;
+}
+
+
+form label {
+    display: block; 
+    margin-bottom: 5px; 
+    font-weight: bold; 
+}
+
+
+form input[type="text"],
+form input[type="tel"] {
+    width: 100%; 
+    padding: 8px; 
+    margin-bottom: 10px; 
+    border: 1px solid #191970; 
+    border-radius: 4px; 
+    box-sizing: border-box; 
+}
+
+
+form button {
+    display: block; 
+    width: 100%;
+    padding: 10px;
+    background-color: #191970; 
+    color: white; 
+    border: none; 
+    border-radius: 4px; 
+    cursor: pointer; 
+    font-size: 16px; 
+}
+
+
+form button:hover {
+    background-color: #4169E1; 
+    transition: background-color 0.8s ease ; 
+}
+
+
+form label[for="nomeDentista"]:after,
+form label[for="contatoDentista"]:after,
+form label[for="clinicaDentista"]:after,
+form label[for="editarNomeDentista"]:after,
+form label[for="editarContatoDentista"]:after,
+form label[for="editarClinicaDentista"]:after {
+    content: "*"; 
+    
+    margin-left: 4px; 
+}
+
+
+#infoDentista {
+    width: 100%; 
+    border-collapse: collapse; 
+    margin-top: 20px;
+}
+
+
+#infoDentista th,
+#infoDentista td {
+    padding: 8px; 
+    text-align: left; 
+    border: 1px solid #191970;
+}
+
+
+#infoDentista td:last-child button {
+    margin-right: 5px; 
+}
+
+
+#edicaoDentista {
+    display: none; 
+    position: fixed; 
+    z-index: 1000; 
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); 
+}
+
+
+#edicaoDentista .conteudo {
+    background-color: #4169E1; 
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #4169E1;
+    width: 80%; 
+    max-width: 600px; 
+    position: relative; 
+}
+
+#edicaoDentista .fechar {
+    position: absolute; 
+    top: 10px;
+    right: 15px;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer; 
+}
