@@ -44,6 +44,10 @@ nav#modulos a:hover {
     background-color: #4169E1;
 }
 
+form {
+    margin-bottom: 20px;
+}
+
 form label {
     display: block; 
     margin-bottom: 5px; 
@@ -132,4 +136,22 @@ form textarea:invalid:focus {
 
 #formcliente {
     padding: 10px;
+}
+
+
+#infocliente th,
+#infocliente td{
+    padding: 8px; 
+    text-align: left; 
+    border: 1px solid #191970;
+}
+
+#infocliente td:last-child button {
+    margin-right: 5px; 
+}
+
+#infocliente {
+    width: 100%; 
+    border-collapse: collapse; 
+    margin-top: 20px;
 }
