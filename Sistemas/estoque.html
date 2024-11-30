@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,15 +8,18 @@
     <link rel="stylesheet" href="styleestoque.css">
 
 </head>
+
 <body>
-    <nav id="modulos"> 
-        
+    <nav id="modulos">
+
         <a href="index.html">Tela inicial</a>
         <a href="agenda.html"> Entregas </a>
         <a href="clientes.html"> Clientes </a>
         <a href="estoque.html"> Estoque </a>
         <a href="dentistas.html"> Dentistas </a>
         <a href="logout.php">Sair</a>
+        <a id="gerarjson">Gerar JSON</a>
+
 
     </nav>
 
@@ -23,7 +27,7 @@
     <div class="contem">
 
         <h1 id="tituloest">Estoque</h1>
-        
+
         <form id="formestoque">
             <label for="descitem">*Item</label>
             <input type="text" id="descitem" name="descitem" required>
@@ -39,20 +43,26 @@
                 </tr>
             </thead>
             <tbody>
-                
+
             </tbody>
         </table>
+        
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        let estoque = [];
+
+        document.addEventListener('DOMContentLoaded', function () {
             carregarEstoque();
+
+            document.getElementById('gerarjson').addEventListener('click', gerarjson);
         });
 
         function carregarEstoque() {
             fetch('db_estoque.php')
                 .then(response => response.json())
                 .then(data => {
+                    estoque = data;
                     const tableBody = document.querySelector('#tabelaestoque tbody');
                     tableBody.innerHTML = '';
                     data.forEach(item => {
@@ -111,19 +121,35 @@
         }
 
         function excluirItem(item) {
-            if(confirm('Tem certeza que deseja excluir esse item ?')){
-            const formData = new FormData();          
-            formData.append('action', 'excluir');
-            formData.append('item', item);
+            if (confirm('Tem certeza que deseja excluir esse item ?')) {
+                const formData = new FormData();
+                formData.append('action', 'excluir');
+                formData.append('item', item);
 
-            fetch('db_estoque.php', {
-                method: 'POST',
-                body: formData
-            }).then(() => {
-                carregarEstoque();
-            });
+                fetch('db_estoque.php', {
+                    method: 'POST',
+                    body: formData
+                }).then(() => {
+                    carregarEstoque();
+                });
+            }
         }
-    }
+
+        function gerarjson() {
+            if (estoque.length === 0) {
+                alert('Nenhum produto cadastrado para gerar o JSON!');
+                return;
+            }
+
+            const jsoncontent = JSON.stringify(estoque, null, 2);
+            const blob = new Blob([jsoncontent], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'estoque.json';
+            a.click();
+        }
     </script>
 </body>
+
 </html>

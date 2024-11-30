@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="styleage.css">
 </head>
 
+
 <body>
     <nav id="modulos">
         <a href="index.html">Tela inicial</a>
@@ -16,6 +17,7 @@
         <a href="estoque.html">Estoque</a>
         <a href="dentistas.html">Dentistas</a>
         <a href="logout.php">Sair</a>
+        <a id="gerajson">Gerar JSON</a>
     </nav>
 
     <table id="agenda">
@@ -38,6 +40,9 @@
         document.addEventListener('DOMContentLoaded', () => {
             const agenda = document.getElementById('agenda').querySelector('tbody');
             const headerDataEntrega = document.getElementById('data-entrega');
+            //adicionei linha avbaixo do botão de adicionar
+            const btngerarjson = document.getElementById('gerajson');
+
 
             let clients = [];
 
@@ -78,7 +83,29 @@
 
                 
                 agenda.innerHTML = '';
-                clients.forEach(cliente => adicionarClienteNaAgenda(cliente));
+                clients.forEach(cliente => adicionarClienteNaAgenda(cliente));               
+            });
+
+            //aqui é verificado se tem algum cliente para gerar
+
+            btngerarjson.addEventListener('click',() =>{
+                if(clients.length === 0){
+                    alert('Nenhum cliente para gerar o JSON');
+                    return;
+                }
+
+                const jsoncontent = JSON.stringify(clients, null, 2);
+
+            //é criado o JSON
+
+            const blob = new Blob([jsoncontent], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'agenda.json';
+            a.click();
+
+
             });
         });
     </script>

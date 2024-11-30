@@ -9,13 +9,15 @@
 </head>
 
 <body>
-    <nav id="modulos"> 
+    <nav id="modulos">
         <a href="index.html">Tela inicial</a>
         <a href="agenda.html">Agenda</a>
         <a href="clientes.html">Clientes</a>
         <a href="estoque.html">Estoque</a>
         <a href="dentistas.html">Dentistas</a>
         <a href="logout.php">Sair</a>
+        <a id="gerarjson">Gerar JSON</a>
+
     </nav>
 
     <form id="formDentista">
@@ -76,6 +78,11 @@
             const editarContatoDentista = document.getElementById('editarContatoDentista');
             const editarClinicaDentista = document.getElementById('editarClinicaDentista');
             const fechar = document.querySelector('.fechar');
+            const gerarJsonBtn = document.getElementById('gerarjson');
+            gerarJsonBtn.addEventListener('click', gerarjson);
+
+
+    
 
             let dentistas = [];
             let editarDentistaIndex = null;
@@ -83,6 +90,7 @@
             fetch('get_dentista.php')
                 .then(response => response.json())
                 .then(data => {
+                    dentistas = data;
                     dentistas = data.dentista;
                     dentistas.forEach(dentista => adicionarDentistaNaTabela(dentista));
                 });
@@ -217,6 +225,26 @@
                         console.error("Erro na requisição: ", error);
                     });
             }
+
+
+
+            function gerarjson() {
+                if (dentistas.length === 0) {
+                    alert('Nenhum dentista cadastrado para gerar o JSON!');
+                    return;
+                }
+
+                const jsoncontent = JSON.stringify(dentistas, null, 2);
+                const blob = new Blob([jsoncontent], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'dentista.json';
+                a.click();
+            }
+
+
         });
     </script>
 </body>
